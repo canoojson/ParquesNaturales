@@ -9,21 +9,21 @@ import retrofit2.http.Path
 import retrofit2.http.PUT
 
 interface ParquesNaturalesApi {
-    @GET("parquesnaturales")
+    @GET("parques")
     suspend fun obtenerParques(): List<ParqueNatural>
 
-    @POST("parquesnaturales")
+    @POST("parques")
     suspend fun insertarParque(
         @Body parque: ParqueNatural
     ): ParqueNatural
 
-    @PUT("parquesnaturales/{id}")
+    @PUT("parques/{id}")
     suspend fun actualizarParque(
         @Path("id") id: Int,
         @Body parque: ParqueNatural
     ): ParqueNatural
 
-    @DELETE("parquesnaturales/{id}")
+    @DELETE("parques/{id}")
     suspend fun eliminarParque(
         @Path("id") id: Int
     ): ParqueNatural

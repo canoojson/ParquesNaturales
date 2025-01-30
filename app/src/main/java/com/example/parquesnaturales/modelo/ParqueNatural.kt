@@ -1,20 +1,15 @@
 package com.example.parquesnaturales.modelo
 
+import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ParqueNatural(
-    @SerialName(value = "ID")
+    @SerialName(value = "id")
     val id: Int = 0,
-    @SerialName(value = "Nombre")
+    @SerialName(value = "nombre")
     val nombre: String,
-    @SerialName(value = "comunidad_autonomaid")
-    val comunidadId: Int,
-    @SerialName(value = "Extension")
+    @SerialName(value = "extension")
     val extension: Double,
-    @SerialName(value = "OrganismoID")
-    val organismoId: Int,
-    @SerialName(value = "TipoParqueID")
-    val tipoParqueId: Int,
 )

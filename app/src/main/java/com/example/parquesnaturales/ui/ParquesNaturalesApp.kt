@@ -3,6 +3,7 @@ package com.example.parquesnaturales.ui
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -32,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -40,6 +42,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.parquesnaturales.R
 import com.example.parquesnaturales.modelo.Ruta
+import com.example.parquesnaturales.ui.pantallas.PantallaActualizarParque
+import com.example.parquesnaturales.ui.pantallas.PantallaInicio
+import com.example.parquesnaturales.ui.pantallas.PantallaInsertarParque
 
 enum class Pantallas(@StringRes val titulo: Int){
     //Parques Naturales
@@ -98,10 +103,12 @@ fun ParquesNaturalesApp(
                         icon ={
                             if(selectedItem == indice){
                                 Image(painter = painterResource(id = ruta.iconoLleno),
-                                    contentDescription = stringResource(id = ruta.nombre))
+                                    contentDescription = stringResource(id = ruta.nombre),
+                                    modifier= Modifier.size(18.dp))
                             }else{
                                 Image(painter = painterResource(id = ruta.iconoVacio),
-                                    contentDescription = stringResource(id = ruta.nombre))
+                                    contentDescription = stringResource(id = ruta.nombre),
+                                    modifier= Modifier.size(18.dp))
                             }
                         },
                         label = {Text(text = stringResource(id = ruta.nombre))},
@@ -114,8 +121,15 @@ fun ParquesNaturalesApp(
             }
         },
         floatingActionButton = {
-            if(pantallaActual.titulo == Pantallas.ParquesNaturales.titulo || pantallaActual.titulo == Pantallas.Especies.titulo){
-                FloatingActionButton(onClick = { /*TODO*/ }) {
+            if(pantallaActual.titulo == Pantallas.ParquesNaturales.titulo){
+                FloatingActionButton(onClick = { navController.navigate(Pantallas.InsertarParque.name)}) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(id = R.string.insertar)
+                    )
+                }
+            }else if(pantallaActual.titulo == Pantallas.Especies.titulo){
+                FloatingActionButton(onClick = { navController.navigate(Pantallas.InsertarEspecie.name)}) {
                     Icon(
                         imageVector = Icons.Default.Add,
                         contentDescription = stringResource(id = R.string.insertar)
@@ -124,13 +138,24 @@ fun ParquesNaturalesApp(
             }
         }
     ) { innerPadding ->
+
+        val uiState = viewModel.parqueUIState
+
         NavHost(
             navController = navController,
             startDestination = Pantallas.ParquesNaturales.name,
             modifier = Modifier.padding(innerPadding)
         ){
             composable(route = Pantallas.ParquesNaturales.name){
-
+                PantallaInicio(
+                    appUIState = uiState,
+                    onParquesObtenidos = {viewModel.obtenerParques()},
+                    onParquePulsado = {
+                        viewModel.actualizarParquePulsado(it)
+                        navController.navigate(Pantallas.ActualizarParque.name)
+                    },
+                    onParqueEliminado = {viewModel.eliminarParque(it)}
+                )
             }
             composable(route = Pantallas.Especies.name){
 
@@ -139,13 +164,21 @@ fun ParquesNaturalesApp(
 
             }
             composable(route = Pantallas.InsertarParque.name){
-
+                PantallaInsertarParque(
+                    onInsertarPulsado = {viewModel.insertarParque(it)}
+                )
             }
             composable(route = Pantallas.InsertarEspecie.name){
 
             }
             composable(route = Pantallas.ActualizarParque.name){
-
+                PantallaActualizarParque(
+                    parque = viewModel.parquePulsado,
+                    onActualizarPulsado = {
+                        viewModel.actualizarParque(it.id, it)
+                        navController.navigate(Pantallas.ParquesNaturales.name)
+                    }
+                )
             }
             composable(route = Pantallas.ActualizarEspecie.name) {
 
@@ -198,12 +231,13 @@ fun AppTopBar(
                         text = { Text(stringResource(id = R.string.ajustes)) },
                         onClick = {
                             mostrarMenu = false
-                            /*TODO*/
+                            navController.navigate(Pantallas.Ajustes.name)
                         }
                     )
                 }
             }
         },
+        scrollBehavior = scrollBehavior,
         modifier = modifier
     )
 

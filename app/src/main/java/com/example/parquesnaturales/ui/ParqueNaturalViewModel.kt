@@ -1,5 +1,6 @@
 package com.example.parquesnaturales.ui
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -30,7 +31,7 @@ class ParqueNaturalViewModel(private val parqueRepositorio: ParqueRepositorio): 
     var parqueUIState: ParqueUIState by mutableStateOf(ParqueUIState.Cargando)
         private set
 
-    var parquePulsado: ParqueNatural by mutableStateOf(ParqueNatural(nombre = "", comunidadId = 0, extension = 0.0, organismoId = 0, tipoParqueId = 0))
+    var parquePulsado: ParqueNatural by mutableStateOf(ParqueNatural(nombre = "", extension = 0.0))
         private set
 
     fun actualizarParquePulsado(parque: ParqueNatural){
@@ -48,8 +49,10 @@ class ParqueNaturalViewModel(private val parqueRepositorio: ParqueRepositorio): 
                val listaParques = parqueRepositorio.obtenerParques()
                 ParqueUIState.ObtenerExito(listaParques)
             } catch (e: IOException){
+                Log.v("Error", e.toString())
                 ParqueUIState.Error
             } catch (e: HttpException){
+                Log.v("Error", e.toString())
                 ParqueUIState.Error
             }
         }
