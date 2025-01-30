@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">ParquesNaturales</string>
+    <string name="parques_naturales">Parques Naturales\n</string>
+    <string name="especies">Especies</string>
+    <string name="ajustes">Ajustes\n</string>
+    <string name="insertar_parque">Insertar Parque</string>
+    <string name="insertar_especie">Insertar Especie</string>
+    <string name="actualizar_parque">Actualizar Parque</string>
+    <string name="actualizar_especie">Actualizar Especie\n</string>
+    <string name="insertar">Insertar\n</string>
+    <string name="atras">Atras\n</string>
+    <string name="masopciones">Mas opciones</string>
 </resources>
