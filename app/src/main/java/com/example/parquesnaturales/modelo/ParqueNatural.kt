@@ -12,4 +12,6 @@ data class ParqueNatural(
     val nombre: String,
     @SerialName(value = "extension")
     val extension: Double,
+    @SerialName(value = "especies")
+   val especies: List<Especie>? = null
 )

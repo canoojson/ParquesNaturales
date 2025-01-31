@@ -20,7 +20,7 @@ import com.example.parquesnaturales.modelo.ParqueNatural
 import com.example.parquesnaturales.ui.ParqueUIState
 
 @Composable
-fun PantallaInicio(
+fun PantallaInicioParques(
     appUIState: ParqueUIState,
     onParquesObtenidos: ()-> Unit,
     onParquePulsado: (parque: ParqueNatural) -> Unit,
@@ -31,7 +31,7 @@ fun PantallaInicio(
         is ParqueUIState.Cargando -> PantallaCargando(modifier= modifier.fillMaxWidth())
         is ParqueUIState.Error -> PantallaError(modifier = modifier.fillMaxWidth())
         is ParqueUIState.ObtenerExito -> PantallaParquesNaturales(
-            lista = appUIState.parque,
+            lista = appUIState.parques,
             onParquePulsado = onParquePulsado,
             onParqueEliminado = onParqueEliminado,
             modifier= modifier.fillMaxWidth()
@@ -43,23 +43,7 @@ fun PantallaInicio(
 
 }
 
-@Composable
-fun PantallaCargando(modifier: Modifier = Modifier){
-    Image(
-        painter = painterResource(id = R.drawable.cargando),
-        contentDescription = stringResource(id = R.string.cargando),
-        modifier = modifier
-    )
-}
 
-@Composable
-fun PantallaError(modifier: Modifier = Modifier){
-    Image(
-        painter = painterResource(id = R.drawable.error),
-        contentDescription = stringResource(id = R.string.error),
-        modifier = modifier
-    )
-}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -84,10 +68,10 @@ fun PantallaParquesNaturales(
                     modifier = Modifier.fillMaxWidth()
                 ){
                     Text(
-                        text = "Nombre: " + parque.nombre,
+                        text = stringResource(R.string.nombre)+ ":" + parque.nombre,
                     )
                     Text(
-                        text = "Extensión: " + parque.extension.toString()
+                        text = stringResource(R.string.extension)+ ":" + parque.extension.toString()
                     )
                 }
             }

@@ -15,4 +15,7 @@
     <string name="cargando">Cargando</string>
     <string name="error">Error</string>
     <string name="actualizar">Actualizar</string>
+    <string name="descripcion">Descripción</string>
+    <string name="tipo">Tipo</string>
+    <string name="favoritos">Favoritos</string>
 </resources>

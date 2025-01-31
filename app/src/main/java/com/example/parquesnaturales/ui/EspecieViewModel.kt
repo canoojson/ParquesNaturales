@@ -14,12 +14,13 @@ import com.example.parquesnaturales.datos.EspecieRepositorio
 import com.example.parquesnaturales.modelo.Especie
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.IOException
 
 sealed interface EspecieUIState {
     data class ObtenerExito(val especie: List<Especie>): EspecieUIState
     data class CrearExito(val especie: Especie): EspecieUIState
-    data class ActualizarExito(val especie: Especie): EspecieUIState
+    data class ActualizarExito(val especie: Response<Especie>): EspecieUIState
     data class EliminarExito(val id: Int): EspecieUIState
 
     object Error: EspecieUIState

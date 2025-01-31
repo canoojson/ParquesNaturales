@@ -2,6 +2,7 @@ package com.example.parquesnaturales.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -42,8 +43,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.parquesnaturales.R
 import com.example.parquesnaturales.modelo.Ruta
+import com.example.parquesnaturales.ui.pantallas.PantallaActualizarEspecie
 import com.example.parquesnaturales.ui.pantallas.PantallaActualizarParque
-import com.example.parquesnaturales.ui.pantallas.PantallaInicio
+import com.example.parquesnaturales.ui.pantallas.PantallaInicioEspecies
+import com.example.parquesnaturales.ui.pantallas.PantallaInicioParques
+import com.example.parquesnaturales.ui.pantallas.PantallaInsertarEspecie
 import com.example.parquesnaturales.ui.pantallas.PantallaInsertarParque
 
 enum class Pantallas(@StringRes val titulo: Int){
@@ -55,6 +59,9 @@ enum class Pantallas(@StringRes val titulo: Int){
 
     //Ajustes
     Ajustes(titulo = R.string.ajustes),
+
+    //Room
+    Favoritos(titulo = R.string.favoritos),
 
     //Insertar
     InsertarParque(titulo = R.string.insertar_parque),
@@ -73,7 +80,8 @@ val listaRutas = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ParquesNaturalesApp(
-    viewModel: ParqueNaturalViewModel = viewModel(factory = ParqueNaturalViewModel.Factory),
+    viewModelParque: ParqueNaturalViewModel = viewModel(factory = ParqueNaturalViewModel.Factory),
+    viewModelEspecie: EspecieViewModel = viewModel(factory = EspecieViewModel.Factory),
     navController: NavHostController = rememberNavController()
 ){
     val pilaRetroceso by navController.currentBackStackEntryAsState()
@@ -139,7 +147,8 @@ fun ParquesNaturalesApp(
         }
     ) { innerPadding ->
 
-        val uiState = viewModel.parqueUIState
+        val uiStateParque = viewModelParque.parqueUIState
+        val uiStateEspecie = viewModelEspecie.especieUIState
 
         NavHost(
             navController = navController,
@@ -147,41 +156,67 @@ fun ParquesNaturalesApp(
             modifier = Modifier.padding(innerPadding)
         ){
             composable(route = Pantallas.ParquesNaturales.name){
-                PantallaInicio(
-                    appUIState = uiState,
-                    onParquesObtenidos = {viewModel.obtenerParques()},
+                PantallaInicioParques(
+                    appUIState = uiStateParque,
+                    onParquesObtenidos = {viewModelParque.obtenerParques()},
                     onParquePulsado = {
-                        viewModel.actualizarParquePulsado(it)
+                        viewModelParque.actualizarParquePulsado(it)
                         navController.navigate(Pantallas.ActualizarParque.name)
                     },
-                    onParqueEliminado = {viewModel.eliminarParque(it)}
+                    onParqueEliminado = {viewModelParque.eliminarParque(it)}
                 )
             }
             composable(route = Pantallas.Especies.name){
-
+                PantallaInicioEspecies(
+                    appUIState= uiStateEspecie,
+                    onEspeciesObtenidas = {viewModelEspecie.obtenerEspecies()},
+                    onEspeciePulsada = {
+                        viewModelEspecie.actualizarEspeciePulsada(it)
+                        navController.navigate(Pantallas.ActualizarEspecie.name)
+                    },
+                    onEspecieEliminada = {viewModelEspecie.eliminarEspecie(it)}
+                )
             }
             composable(route = Pantallas.Ajustes.name){
 
             }
             composable(route = Pantallas.InsertarParque.name){
                 PantallaInsertarParque(
-                    onInsertarPulsado = {viewModel.insertarParque(it)}
+                    onInsertarPulsado = {
+                        viewModelParque.insertarParque(it)
+                        navController.navigate(Pantallas.ParquesNaturales.name)
+                    },
+                    modifier = Modifier.fillMaxSize()
                 )
             }
             composable(route = Pantallas.InsertarEspecie.name){
-
+                PantallaInsertarEspecie(
+                    onInsertarPulsado = {
+                        viewModelEspecie.insertarEspecie(it)
+                        navController.navigate(Pantallas.Especies.name)
+                    },
+                    modifier = Modifier.fillMaxSize()
+                )
             }
             composable(route = Pantallas.ActualizarParque.name){
                 PantallaActualizarParque(
-                    parque = viewModel.parquePulsado,
+                    parque = viewModelParque.parquePulsado,
                     onActualizarPulsado = {
-                        viewModel.actualizarParque(it.id, it)
+                        viewModelParque.actualizarParque(it.id, it)
                         navController.navigate(Pantallas.ParquesNaturales.name)
-                    }
+                    },
+                    modifier = Modifier.fillMaxSize()
                 )
             }
             composable(route = Pantallas.ActualizarEspecie.name) {
-
+                PantallaActualizarEspecie(
+                    especie = viewModelEspecie.especiePulsada,
+                    onActualizarPulsado = {
+                        viewModelEspecie.actualizarEspecie(it.id, it)
+                        navController.navigate(Pantallas.Especies.name)
+                    },
+                    modifier = Modifier.fillMaxSize()
+                )
             }
         }
     }
@@ -206,7 +241,7 @@ fun AppTopBar(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         navigationIcon = {
-            if(puedeNavegarAtras) {
+            if(puedeNavegarAtras && pantallaActual.titulo != Pantallas.ParquesNaturales.titulo && pantallaActual.titulo != Pantallas.Especies.titulo) {
                 IconButton(onClick = onNavegarAtras) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,

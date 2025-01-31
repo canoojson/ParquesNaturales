@@ -15,12 +15,13 @@ import com.example.parquesnaturales.datos.ParqueRepositorio
 import com.example.parquesnaturales.modelo.ParqueNatural
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import retrofit2.Response
 import java.io.IOException
 
 sealed interface ParqueUIState {
-    data class ObtenerExito(val parque:List<ParqueNatural>): ParqueUIState
+    data class ObtenerExito(val parques:List<ParqueNatural>): ParqueUIState
     data class CrearExito(val parque: ParqueNatural): ParqueUIState
-    data class ActualizarExito(val parque: ParqueNatural): ParqueUIState
+    data class ActualizarExito(val parque: Response<ParqueNatural>): ParqueUIState
     data class EliminarExito(val id: Int): ParqueUIState
 
     object Error: ParqueUIState
@@ -65,8 +66,10 @@ class ParqueNaturalViewModel(private val parqueRepositorio: ParqueRepositorio): 
                 val parqueInsertado = parqueRepositorio.insertarParque(parque)
                 ParqueUIState.CrearExito(parqueInsertado)
             } catch (e: IOException){
+                Log.v("Error", e.toString())
                 ParqueUIState.Error
             } catch (e: HttpException){
+                Log.v("Error", e.toString())
                 ParqueUIState.Error
             }
         }
@@ -77,10 +80,13 @@ class ParqueNaturalViewModel(private val parqueRepositorio: ParqueRepositorio): 
             parqueUIState = ParqueUIState.Cargando
             parqueUIState = try {
                 val parqueActualizado = parqueRepositorio.actualizarParque(id, parque)
+                Log.v("Parque Actualizado", parqueActualizado.toString())
                 ParqueUIState.ActualizarExito(parqueActualizado)
             }catch (e: IOException){
+                Log.v("Error", e.toString())
                 ParqueUIState.Error
             } catch (e: HttpException){
+                Log.v("Error", e.toString())
                 ParqueUIState.Error
             }
         }
@@ -93,8 +99,10 @@ class ParqueNaturalViewModel(private val parqueRepositorio: ParqueRepositorio): 
                 parqueRepositorio.eliminarParque(id)
                 ParqueUIState.EliminarExito(id)
             }catch (e: IOException){
+                Log.v("Error", e.toString())
                 ParqueUIState.Error
             } catch (e: HttpException){
+                Log.v("Error", e.toString())
                 ParqueUIState.Error
             }
         }

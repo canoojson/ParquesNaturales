@@ -5,12 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Especie(
-    @SerialName(value = "ID")
+    @SerialName(value = "id")
     val id : Int = 0,
-    @SerialName(value = "Nombre")
+    @SerialName(value = "nombre")
     val nombre : String,
-    @SerialName(value = "Descripcion")
-    val descripcion : String,
-    @SerialName(value = "Tipo")
-    val tipo : String
+    @SerialName(value = "descripcion")
+    val descripcion : String?,
+    @SerialName(value = "tipo")
+    val tipo : String?
 )

@@ -1,18 +1,15 @@
 package com.example.parquesnaturales.ui.pantallas
 
+
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -20,29 +17,39 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.parquesnaturales.R
 import com.example.parquesnaturales.modelo.Especie
-import com.example.parquesnaturales.modelo.ParqueNatural
 
 @Composable
-fun PantallaInsertarParque(
-    onInsertarPulsado:(ParqueNatural) -> Unit,
-    modifier: Modifier = Modifier.fillMaxWidth()
+fun PantallaActualizarEspecie(
+    especie: Especie,
+    onActualizarPulsado:(Especie) -> Unit,
+    modifier: Modifier = Modifier
 ){
-    var nombre by remember { mutableStateOf("")}
-    var extension by remember { mutableDoubleStateOf(0.0) }
-    var extensionTexto by remember { mutableStateOf("") }
+    var nombre by remember { mutableStateOf(especie.nombre)}
+    var descripcion by remember { mutableStateOf(
+        if(especie.descripcion.isNullOrEmpty()){
+            ""
+        }else{
+            especie.descripcion
+        }) }
+    var tipo by remember { mutableStateOf(
+        if(especie.tipo.isNullOrEmpty()){
+            ""
+        }else{
+            especie.tipo
+        }) }
     var errorNombre by remember { mutableStateOf(false) }
-    var errorExtension by remember { mutableStateOf(false) }
+    var errorTipo by remember { mutableStateOf(false) }
+    var errorDescripcion by remember { mutableStateOf(false) }
 
     val contexto = LocalContext.current
 
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         Spacer(Modifier.height(16.dp))
 
         TextField(
@@ -59,33 +66,40 @@ fun PantallaInsertarParque(
         Spacer(Modifier.height(16.dp))
 
         TextField(
-            value = extensionTexto,
+            value = tipo,
             onValueChange = {
-                if(it.all { it.isDigit() || it == '.' }){
-                    extensionTexto = it
-                    extension = it.toDoubleOrNull() ?: 0.0
+                if(it.all { it.isLetter()|| it == ' ' }){
+                    tipo = it
                 }
             },
-            label = { Text(stringResource(id = R.string.extension))},
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number
-            ),
-            isError = errorExtension
+            label = { Text(stringResource(id = R.string.tipo))},
+            isError = errorTipo
         )
+
         Spacer(Modifier.height(16.dp))
+
+        TextField(
+            value = descripcion,
+            onValueChange = {
+                if(it.all { it.isLetter()|| it == ' ' }){
+                    descripcion = it
+                }
+            },
+            label = { Text(stringResource(id = R.string.descripcion))},
+            isError = errorDescripcion
+        )
+
+        Spacer(Modifier.height(16.dp))
+
         Button(onClick = {
-            val especies = emptyList<Especie>()
-            val parque = ParqueNatural(nombre = nombre, extension = extension, especies = especies)
-            if(parque.nombre.isEmpty()){
+            val especie = Especie(id= especie.id,nombre = nombre, tipo = tipo, descripcion = descripcion)
+            if(especie.nombre.isBlank()){
                 errorNombre = true
             }
-            if(parque.extension == 0.0){
-                errorExtension = true
-            }
-            if(errorNombre || errorExtension){
+            if(errorNombre){
                 Toast.makeText(contexto, "Datos no introducidos. Porfavor rellene todos los campos", Toast.LENGTH_SHORT).show()
             }else{
-                onInsertarPulsado(parque)
+                onActualizarPulsado(especie)
             }
         }) {
             Text(stringResource(id = R.string.insertar))

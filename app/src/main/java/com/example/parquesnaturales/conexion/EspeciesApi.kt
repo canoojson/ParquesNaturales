@@ -1,6 +1,7 @@
 package com.example.parquesnaturales.conexion
 
 import com.example.parquesnaturales.modelo.Especie
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -21,10 +22,10 @@ interface EspeciesApi {
     suspend fun actualizarEspecie(
         @Path("id") id: Int,
         @Body especie: Especie
-    ): Especie
+    ): Response<Especie>
 
     @DELETE("especies/{id}")
     suspend fun eliminarEspecie(
         @Path("id") id: Int
-    ): Especie
+    ): Response<Especie>
 }
