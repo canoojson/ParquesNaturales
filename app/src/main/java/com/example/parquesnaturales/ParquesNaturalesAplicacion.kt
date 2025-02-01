@@ -8,6 +8,6 @@ class ParquesNaturalesAplicacion: Application() {
     lateinit var contenedor: ContenedorApp
     override fun onCreate() {
         super.onCreate()
-        contenedor = ParqueContenedorApp()
+        contenedor = ParqueContenedorApp(this)
     }
 }

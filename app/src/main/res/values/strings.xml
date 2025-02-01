@@ -18,4 +18,5 @@
     <string name="descripcion">Descripción</string>
     <string name="tipo">Tipo</string>
     <string name="favoritos">Favoritos</string>
+    <string name="anotaciones">Anotaciones</string>
 </resources>

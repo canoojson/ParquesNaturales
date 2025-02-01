@@ -1,7 +1,6 @@
 package com.example.parquesnaturales.ui.pantallas
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,14 +11,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.parquesnaturales.R
 import com.example.parquesnaturales.modelo.Especie
-import com.example.parquesnaturales.modelo.ParqueNatural
+import com.example.parquesnaturales.modelo.EspecieRoom
 import com.example.parquesnaturales.ui.EspecieUIState
-import com.example.parquesnaturales.ui.ParqueUIState
 
 @Composable
 fun PantallaInicioEspecies(
@@ -27,6 +24,7 @@ fun PantallaInicioEspecies(
     onEspeciesObtenidas: ()-> Unit,
     onEspeciePulsada: (especie: Especie) -> Unit,
     onEspecieEliminada: (id: Int) -> Unit,
+    onEspecieGuardada: (especie: EspecieRoom) -> Unit,
     modifier: Modifier = Modifier
 ){
     when(appUIState){
@@ -36,6 +34,7 @@ fun PantallaInicioEspecies(
             lista = appUIState.especie,
             onEspeciePulsada = onEspeciePulsada,
             onEspecieEliminada = onEspecieEliminada,
+            onEspecieGuardada = onEspecieGuardada,
             modifier= modifier.fillMaxWidth()
         )
         is EspecieUIState.CrearExito -> onEspeciesObtenidas()
@@ -52,6 +51,7 @@ fun PantallaEspecies(
     lista: List<Especie>,
     onEspeciePulsada: (especie: Especie) -> Unit,
     onEspecieEliminada: (id: Int) -> Unit,
+    onEspecieGuardada: (especie: EspecieRoom) -> Unit,
     modifier: Modifier = Modifier
 ){
     LazyColumn(modifier= modifier){
@@ -61,7 +61,11 @@ fun PantallaEspecies(
                     .fillMaxWidth()
                     .combinedClickable(
                         onClick = {onEspeciePulsada(especie)},
-                        onLongClick = {onEspecieEliminada(especie.id)}
+                        onLongClick = {onEspecieEliminada(especie.id)},
+                        onDoubleClick = {
+                            val especieRoom = EspecieRoom(nombre = especie.nombre, tipo = especie.tipo!!, anotaciones = "")
+                            onEspecieGuardada(especieRoom)
+                        }
                     )
                     .padding(16.dp)
             ){

@@ -1,6 +1,8 @@
 package com.example.parquesnaturales.datos
 
+import android.content.Context
 import com.example.parquesnaturales.conexion.EspeciesApi
+import com.example.parquesnaturales.conexion.EspeciesBaseDatos
 import com.example.parquesnaturales.conexion.ParquesNaturalesApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -11,9 +13,10 @@ import retrofit2.Retrofit
 interface ContenedorApp{
     val parqueRepositorio: ParqueRepositorio
     val especieRepositorio: EspecieRepositorio
+    val especieRoomRepositorio: EspecieRoomRepositorio
 }
 
-class ParqueContenedorApp : ContenedorApp{
+class ParqueContenedorApp(private val context: Context) : ContenedorApp{
     private val baseUrl = "http://192.168.1.31:8080/api/"
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -41,6 +44,10 @@ class ParqueContenedorApp : ContenedorApp{
 
     override val especieRepositorio: EspecieRepositorio by lazy {
         ConexionEspecieRepositorio(servicioretrofitEspecies)
+    }
+
+    override val especieRoomRepositorio: EspecieRoomRepositorio by lazy {
+        ConexionEspecieRoomRepositorio(EspeciesBaseDatos.obtenerBaseDatos(context = context).especieDao())
     }
 
 }
