@@ -20,4 +20,8 @@ interface EspecieDao {
     suspend fun actualizarEspecie(especie: EspecieRoom)
     @Delete
     suspend fun eliminarEspecie(especie: EspecieRoom)
+    @Query("DELETE FROM especie")
+    suspend fun vaciarDB()
+    @Query("DELETE FROM sqlite_sequence")
+    suspend fun reiniciarContador()
 }

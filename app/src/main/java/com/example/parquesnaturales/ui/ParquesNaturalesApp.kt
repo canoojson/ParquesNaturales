@@ -46,6 +46,7 @@ import com.example.parquesnaturales.modelo.Ruta
 import com.example.parquesnaturales.ui.pantallas.PantallaActualizarEspecie
 import com.example.parquesnaturales.ui.pantallas.PantallaActualizarEspecieRoom
 import com.example.parquesnaturales.ui.pantallas.PantallaActualizarParque
+import com.example.parquesnaturales.ui.pantallas.PantallaAjustes
 import com.example.parquesnaturales.ui.pantallas.PantallaFavInicio
 import com.example.parquesnaturales.ui.pantallas.PantallaInicioEspecies
 import com.example.parquesnaturales.ui.pantallas.PantallaInicioParques
@@ -86,6 +87,7 @@ fun ParquesNaturalesApp(
     viewModelParque: ParqueNaturalViewModel = viewModel(factory = ParqueNaturalViewModel.Factory),
     viewModelEspecie: EspecieViewModel = viewModel(factory = EspecieViewModel.Factory),
     viewModelEspecieRoom: EspecieRoomViewModel = viewModel(factory = EspecieRoomViewModel.Factory),
+    viewModelAjustes: AjustesViewModel = viewModel(factory = AjustesViewModel.Factory),
     navController: NavHostController = rememberNavController()
 ){
     val pilaRetroceso by navController.currentBackStackEntryAsState()
@@ -206,7 +208,7 @@ fun ParquesNaturalesApp(
                 )
             }
             composable(route = Pantallas.Ajustes.name){
-
+                PantallaAjustes(onBorrarFavoritosPulsado = {viewModelAjustes.vaciarDB()})
             }
             composable(route = Pantallas.InsertarParque.name){
                 PantallaInsertarParque(

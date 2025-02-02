@@ -9,6 +9,7 @@ interface EspecieRoomRepositorio {
     suspend fun insertar(especie: EspecieRoom)
     suspend fun actualizar(especie: EspecieRoom)
     suspend fun eliminar(especie: EspecieRoom)
+    suspend fun vaciarDB()
 }
 
 class ConexionEspecieRoomRepositorio(
@@ -19,4 +20,8 @@ class ConexionEspecieRoomRepositorio(
     override suspend fun insertar(especie: EspecieRoom) = especieDao.insertarEspecie(especie)
     override suspend fun actualizar(especie: EspecieRoom) = especieDao.actualizarEspecie(especie)
     override suspend fun eliminar(especie: EspecieRoom) = especieDao.eliminarEspecie(especie)
+    override suspend fun vaciarDB() {
+        especieDao.vaciarDB()
+        especieDao.reiniciarContador()
+    }
 }

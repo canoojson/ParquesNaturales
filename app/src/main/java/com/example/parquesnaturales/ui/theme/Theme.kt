@@ -1,6 +1,5 @@
 package com.example.parquesnaturales.ui.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -25,7 +24,7 @@ private val DarkColorScheme = darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     primary = Color(0xFFFFD700),
-    secondary = Color(0xFF0047A),
+    secondary = Color(0xFF0047AA),
     background = Color(0xFFFFFFFF),
     surface = Color(0xFFEFEFEF),
     onPrimary = Color.Black,
@@ -47,7 +46,6 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun ParquesNaturalesTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {

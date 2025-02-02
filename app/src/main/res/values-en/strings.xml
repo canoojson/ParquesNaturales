@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Natural Parks</string>
+    <string name="parques_naturales">Natural Parks</string>
+    <string name="especies">Species</string>
+    <string name="ajustes">Settings</string>
+    <string name="insertar_parque">Insert Park</string>
+    <string name="insertar_especie">Insert Species</string>
+    <string name="actualizar_parque">Update Park</string>
+    <string name="actualizar_especie">Update Species</string>
+    <string name="insertar">Insert</string>
+    <string name="atras">Back</string>
+    <string name="masopciones">More options</string>
+    <string name="nombre">Name</string>
+    <string name="extension">Extension</string>
+    <string name="cargando">Loading</string>
+    <string name="error">Error</string>
+    <string name="actualizar">Update</string>
+    <string name="descripcion">Description</string>
+    <string name="tipo">Type</string>
+    <string name="favoritos">Favorites</string>
+    <string name="anotaciones">Notes</string>
+</resources>
